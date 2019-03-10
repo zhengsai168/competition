@@ -3,7 +3,7 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
 import os
 import sys
 
@@ -19,11 +19,11 @@ test.drop('id',axis=1,inplace=True)
 
 y_train = train.pop('y')
 
-reg = LinearRegression()
-reg.fit(train, y_train)
-y_pred = reg.predict(test)
+gbdt = GradientBoostingRegressor()
 
-y_pred = list(map(lambda x: x if x >= 0 else 0, y_pred))
-# ���Ԥ������my_LR_prediction.csv
-submit['y'] = y_pred
-submit.to_csv('my_LR_prediction.csv', index=False)
+# gbdt.fit(train, y_train)
+# y_pred = gbdt.predict(test)
+#
+# submit['y'] = y_pred
+# print(submit.count())
+# submit.to_csv('my_LR_prediction.csv', index=False)
