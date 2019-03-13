@@ -21,8 +21,11 @@ y_train = train.pop('y')
 
 gbdt = GradientBoostingRegressor()
 
-# gbdt.fit(train, y_train)
-# y_pred = gbdt.predict(test)
+gbdt.fit(train, y_train)
+y_pred = gbdt.predict(test)
+
+print(gbdt.feature_importances_)
+
 #
 # submit['y'] = y_pred
 # print(submit.count())
