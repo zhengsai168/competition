@@ -46,7 +46,7 @@ param_grid = {
 random_param_dict = {
     # 'max_depth': [3,4,5,6],
     # 'learning_rate': np.linspace(0.02,0.2,10),
-    # 'n_estimators': range(100,1001,100)
+    'n_estimators': range(100,1001,100)
     # 'gamma': np.linspace(0.03,0.06,60),
     # 'min_child_weight': np.arange(5,15),
     # 'max_delta_step': np.arange(0,10),
@@ -80,39 +80,44 @@ rf_param_dict = {
     # 'min_samples_leaf': range(1,11),
     # 'max_features': range(2,8)
 }
-
-rf = RandomForestRegressor(n_estimators=800, max_depth=12,min_samples_split=10,min_samples_leaf=2,
-                           max_features=6, )
-xgbr = XGBRegressor(n_estimators=900,learning_rate=0.02,max_depth=5,min_child_weight=15,gamma=0.2,subsample=0.75)
-grid = GridSearchCV(xgbr,random_param_dict,scoring='neg_mean_squared_error')
+#
+# rf = RandomForestRegressor(n_estimators=800, max_depth=12,min_samples_split=10,min_samples_leaf=2,
+#                            max_features=6, )
+# # ,max_depth=5,min_child_weight=15,gamma=0.2,subsample=0.75)
+# xgbr = XGBRegressor()
+# grid = GridSearchCV(xgbr,random_param_dict,scoring='neg_mean_squared_error')
 # grid = RandomizedSearchCV(xgbr,random_param_dict,n_iter=10,scoring='neg_mean_squared_error')
-# x = []
-# y = []
-# for i in range(200,401,10):
-#     xgbr = XGBRegressor(n_estimators=i,learning_rate=0.05,max_depth=5,min_child_weight=7,gamma=0.2,subsample=0.8)
-#     grid = GridSearchCV(xgbr,rf_param_dict,scoring='neg_mean_squared_error')
-#     grid.fit(train, y_train)
-#     x.append(i)
-#     y.append(grid.best_score_)
+x = []
+y = []
+for i in range(100,1001,100):
+    # xgbr = XGBRegressor(n_estimators=i, learning_rate=0.08, max_depth=4,min_child_weight=16,subsample=1)
+    xgbr = XGBRegressor(max_depth=5,n_estimators=i,learning_rate=0.086610169491525418,
+                      reg_alpha=0.96896551724137936,gamma=0.03,
+                      subsample=0.85, colsample_bylevel=0.71551724137931028)
+    grid = GridSearchCV(xgbr,rf_param_dict,scoring='neg_mean_squared_error')
+    grid.fit(train, y_train)
+    x.append(i)
+    y.append(grid.best_score_)
     #print(grid.best_params_)
     #print(grid.best_score_)
 
-
+plt.plot(x,y)
+plt.show()
 
 # plt.plot(x,y)
 # plt.show()
 
-grid.fit(train, y_train)
-rf.fit(train, y_train)
-print(grid.best_params_)
-print(grid.best_score_)
-y_pred_1 = grid.predict(test)
-y_pred_1 = list(map(lambda x: x if x >= 0 else 0, y_pred_1))
+# grid.fit(train, y_train)
+# # rf.fit(train, y_train)
+# print(grid.best_params_)
+# print(grid.best_score_)
+# y_pred_1 = grid.predict(test)
+# y_pred_1 = list(map(lambda x: x if x >= 0 else 0, y_pred_1))
 
-y_pred_2 = rf.predict(test)
-y_pred_2 = list(map(lambda x: x if x >= 0 else 0, y_pred_2))
+# y_pred_2 = rf.predict(test)
+# y_pred_2 = list(map(lambda x: x if x >= 0 else 0, y_pred_2))
 
-y_pred = [(t1+t2)/2.0 for t1,t2 in zip(y_pred_1,y_pred_2)]
-
-submit['y'] = y_pred_1
-submit.to_csv('my_xgb_prediction_5.csv', index=False)
+# y_pred = [(t1+t2)/2.0 for t1,t2 in zip(y_pred_1,y_pred_2)]
+#
+# submit['y'] = y_pred_1
+# submit.to_csv('my_xgb_prediction_6.csv', index=False)

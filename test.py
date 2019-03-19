@@ -33,5 +33,23 @@ import numpy as np
 #     s=s+i
 # time_end=time.time()
 # print('totally cost',time_end-time_start)
+import os
+print ('/'.join(os.getcwd().split('\\')))
+def go(s):
+    return ('/'.join(s.split('\\')))
 
-print(int(1==1))
+def listdir(path, list_name):  # 传入存储的list
+    for file in os.listdir(path):
+        file_path = os.path.join(path, file)
+        if os.path.isdir(file_path):
+            listdir(file_path, list_name)
+        else:
+            list_name.append(file_path)
+
+p = '/home/ai_platform/project'
+
+li = []
+
+listdir(p,li)
+for n in li:
+    print(go(n))
