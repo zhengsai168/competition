@@ -1,2 +1,1 @@
-# sofasofa
-sofasofa competition code
+
